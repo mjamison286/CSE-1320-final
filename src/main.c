@@ -39,7 +39,7 @@ void printList(struct Node*);
 void printCalendar(struct Node*);
 
 int countList(struct Node*);
-struct Event* sortEvents(struct Node*);
+int compareEvents(struct Event, struct Event);
 void freeList(struct Node*);
 
 int main()
@@ -101,4 +101,46 @@ int main()
     }
 
     return 0;
+}
+
+struct Node* append(struct Node* head, struct Event event)
+{
+    struct Node* node = malloc(sizeof(struct Node));
+
+    node->event = event;
+    node->left = NULL;
+    node->right = NULL;
+
+    if(head == NULL)
+    {
+        return node;
+    }
+
+    struct Node* current = head;
+
+    while(current != NULL)
+    {
+        if(compareEvents(current->event, event) == 2)
+        {
+            if(current->right == NULL)
+            {
+                current->right = node;
+                return head;
+            }
+
+            current = current->right;
+        }
+        else
+        {
+            if(current->left == NULL)
+            {
+                current->left = node;
+                return head;
+            }
+
+            current = current->left;
+        }
+    }
+
+    return head;
 }
