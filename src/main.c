@@ -40,6 +40,7 @@ void printCalendar(struct Node*);
 
 int countList(struct Node*);
 int compareEvents(struct Event, struct Event);
+void printTraverse(struct Node*);
 void freeList(struct Node*);
 
 int main()
@@ -143,4 +144,80 @@ struct Node* append(struct Node* head, struct Event event)
     }
 
     return head;
+}
+
+struct Event addEvent()
+{
+    struct Event event;
+    
+    char c;
+
+    do
+    {
+        while(getchar() != '\n');
+
+        printf("Enter the date of the event (MM/DD/YYYY): ");
+    }
+    while(scanf("%d%c%d%c%d", &(event.month), &c, &(event.day), &c, &(event.year)) != 5);
+
+    do
+    {
+        while(getchar() != '\n');
+
+        printf("Enter the time of the event (HH:MM): ");
+    }
+    while(scanf("%d%c%d", &(event.hour), &c, &(event.minute)) != 3);
+
+    while(getchar() != '\n');
+
+    printf("Enter the name of the event: ");
+    fgets(event.name, sizeof(event.name), stdin);
+
+    printf("Enter the address or the location of the event: ");
+    fgets(event.place, sizeof(event.place), stdin);
+
+    printf("Enter a short description of the event: ");
+    fgets(event.description, sizeof(event.description), stdin);
+
+    return event;
+}
+
+void printList(struct Node* head)
+{
+    printTraverse(head);    
+}
+
+int compareEvents(struct Event e1, struct Event e2)
+{
+    long long e1minutes = e1.minute + (e1.hour * 60) + (e1.day * 24 * 60) + ((int)(e1.month * 30.44 * 24 * 60)) + (e1.year * 365 * 24 * 60);
+    long long e2minutes = e2.minute + (e2.hour * 60) + (e2.day * 24 * 60) + ((int)(e2.month * 30.44 * 24 * 60)) + (e2.year * 365 * 24 * 60);
+
+    printf("e1minutes: %lld", e1minutes);
+    printf("e2minutes: %lld", e2minutes);
+
+    if(e1minutes > e2minutes)
+    {
+        return 1;
+    }
+    else if(e2minutes < e1minutes)
+    {
+        return 2;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+void printTraverse(struct Node* node)
+{
+    if(node->left != NULL)
+    {
+        printTraverse(node->left);
+    }
+    printf("%s", node->event.name);
+    if(node->right != NULL)
+    {
+        printTraverse(node->right);
+    }
 }
